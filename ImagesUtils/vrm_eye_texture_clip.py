@@ -76,4 +76,22 @@ def main():
     parser.add_argument("-f", "--file", type=str, help="指定图片文件路径")
     parser.add_argument("-o", "--output", type=str, help="指定输出目录")
     parser.add_argument("-res", "--resolution", type=int, default=512, help="指定输出图片的宽高 (默认: 512)")
-    parser.add_argument("-p", "--padding", type=int, default=
+    parser.add_argument("-p", "--padding", type=int, default=40, help="眼睛与边界的最小留白 (默认: 40)")
+
+    args = parser.parse_args()
+
+    target_file = None
+    if args.select:
+        root = Tk(); root.withdraw()
+        target_file = filedialog.askopenfilename(title="选择瞳孔贴图", filetypes=[("Images", "*.png *.jpg *.tga")])
+        root.destroy()
+    elif args.file:
+        target_file = args.file
+    else:
+        parser.print_help(); return
+
+    if target_file:
+        split_eyes_advanced(target_file, args.output, args.resolution, args.padding)
+
+if __name__ == "__main__":
+    main()
